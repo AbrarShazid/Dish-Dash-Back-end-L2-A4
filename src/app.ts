@@ -3,7 +3,7 @@ import express, { Application } from "express";
 import { auth } from "./lib/auth";
 import cors from "cors";
 import { userRouter } from "./modules/user/user.router";
-// import { menuRouter } from "./modules/menu/menu.router";
+import { menuRouter } from "./modules/menu/menu.router";
 import { categoryRouter } from "./modules/category/category.router";
 // import { orderRouter } from "./modules/order/order.router";
 // import { providerRoute } from "./modules/provider/provider.router";
@@ -33,7 +33,7 @@ app.use("/category", categoryRouter);
 
 // menu related task
 
-// app.use("/menu", menuRouter);
+app.use("/menu", menuRouter);
 
 // order related task
 // app.use("/order", orderRouter);
