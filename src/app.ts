@@ -5,8 +5,8 @@ import cors from "cors";
 import { userRouter } from "./modules/user/user.router";
 import { menuRouter } from "./modules/menu/menu.router";
 import { categoryRouter } from "./modules/category/category.router";
-// import { orderRouter } from "./modules/order/order.router";
-// import { providerRoute } from "./modules/provider/provider.router";
+import { orderRouter } from "./modules/order/order.router";
+import { providerRoute } from "./modules/provider/provider.router";
 
 const app: Application = express();
 
@@ -25,7 +25,7 @@ app.use(express.json());
 app.use("/user", userRouter);
 
 //provider
-// app.use("/provider", providerRoute);
+app.use("/provider", providerRoute);
 
 //category related task
 
@@ -36,7 +36,7 @@ app.use("/category", categoryRouter);
 app.use("/menu", menuRouter);
 
 // order related task
-// app.use("/order", orderRouter);
+app.use("/order", orderRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello  World");
