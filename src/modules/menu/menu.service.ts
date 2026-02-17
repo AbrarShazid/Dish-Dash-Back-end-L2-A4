@@ -102,95 +102,95 @@ const updateMenuItem = async (
   return updatedMeal;
 };
 
-// const getAllMenuItems = async (query: any) => {
-//   const { page, limit, skip, sortBy, sortOrder } =
-//     paginationSortingHelper(query);
+const getAllMenuItems = async (query: any) => {
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationSortingHelper(query);
 
-//   const { search, categoryId, minPrice, maxPrice } = query;
+  const { search, categoryId, minPrice, maxPrice } = query;
 
-//   const andConditions: any[] = [];
+  const andConditions: any[] = [];
 
-//   // Searching (name + description)
-//   if (search) {
-//     andConditions.push({
-//       OR: [
-//         {
-//           name: {
-//             contains: search,
-//             mode: "insensitive",
-//           },
-//         },
-//         {
-//           description: {
-//             contains: search,
-//             mode: "insensitive",
-//           },
-//         },
-//       ],
-//     });
-//   }
+  // Searching (name + description)
+  if (search) {
+    andConditions.push({
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      ],
+    });
+  }
 
-//   //  Filter by category
-//   if (categoryId) {
-//     andConditions.push({
-//       categoryId,
-//     });
-//   }
+  //  Filter by category
+  if (categoryId) {
+    andConditions.push({
+      categoryId,
+    });
+  }
 
-//   // Filter by price
-//   if (minPrice && maxPrice) {
-//     andConditions.push({
-//       price: {
-//         gte: Number(minPrice),
-//         lte: Number(maxPrice),
-//       },
-//     });
-//   }
+  // Filter by price
+  if (minPrice && maxPrice) {
+    andConditions.push({
+      price: {
+        gte: Number(minPrice),
+        lte: Number(maxPrice),
+      },
+    });
+  }
 
-//   andConditions.push({
-//     isAvailable: true, //menu item must be available
-//     provider: {
-//       isOpen: true,
-//     },
-//   });
+  andConditions.push({
+    isAvailable: true, //menu item must be available
+    provider: {
+      isOpen: true,
+    },
+  });
 
-//   const whereConditions =
-//     andConditions.length > 0 ? { AND: andConditions } : {};
+  const whereConditions =
+    andConditions.length > 0 ? { AND: andConditions } : {};
 
-//   // 📦 Get paginated data
-//   const meals = await prisma.meal.findMany({
-//     where: whereConditions,
-//     include: {
-//       category: {
-//         select: {
-//           name: true,
-//         },
-//       },
-//     },
-//     skip,
-//     take: limit,
-//     orderBy: {
-//       [sortBy]: sortOrder,
-//     },
-//   });
+  // 📦 Get paginated data
+  const meals = await prisma.meal.findMany({
+    where: whereConditions,
+    include: {
+      category: {
+        select: {
+          name: true,
+        },
+      },
+    },
+    skip,
+    take: limit,
+    orderBy: {
+      [sortBy]: sortOrder,
+    },
+  });
 
-//   const total = await prisma.meal.count({
-//     where: whereConditions,
-//   });
+  const total = await prisma.meal.count({
+    where: whereConditions,
+  });
 
-//   return {
-//     meta: {
-//       page,
-//       limit,
-//       total,
-//     },
-//     data: meals.map((meal) => ({
-//       ...meal,
-//       categoryName: meal.category.name,
-//       category: undefined,
-//     })),
-//   };
-// };
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: meals.map((meal) => ({
+      ...meal,
+      categoryName: meal.category.name,
+      category: undefined,
+    })),
+  };
+};
 
 // const getMenuItemById = async (id: string) => {
 //   const meal = await prisma.meal.findUnique({
@@ -228,6 +228,6 @@ const updateMenuItem = async (
 export const menuService = {
   addMenuItem,
   updateMenuItem,
-  // getAllMenuItems,
+  getAllMenuItems,
   // getMenuItemById,
 };

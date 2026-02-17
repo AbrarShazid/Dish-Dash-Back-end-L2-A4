@@ -51,12 +51,30 @@ const updateMenuItem = async (req: Request, res: Response) => {
  }
 };
 
+const getAllMenuItems = async (req: Request, res: Response) => {
+ try {
+   const result = await menuService.getAllMenuItems(req.query);
+
+
+   res.status(200).json({
+     success: true,
+     meta: result.meta,
+     data: result.data,
+     message: "Menu items retrieved successfully",
+   });
+ } catch (error: any) {
+   res.status(400).json({
+     success: false,
+     message: error.message || "Failed to retrieve menu items",
+   });
+ }
+};
 
 
 
 export const menuController = {
   addMenuItem,
   updateMenuItem,
-  // getAllMenuItems,
+  getAllMenuItems,
   // getMenuItemById,
 };
