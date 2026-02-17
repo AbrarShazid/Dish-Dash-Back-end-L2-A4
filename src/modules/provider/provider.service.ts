@@ -24,58 +24,53 @@ const getAllProviders = async () => {
 };
 
 const getMenuByProvider = async (providerId: string) => {
- const providerWithMenu = await prisma.providerProfile.findUnique({
-   where: { id: providerId, isOpen: true },
-   include: {
-     user: {
-       select: {
-         name: true,
-       },
-     },
+  const providerWithMenu = await prisma.providerProfile.findUnique({
+    where: { id: providerId },
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
 
+      meals: {
+        where: {
+          isAvailable: true,
+        },
 
-     meals: {
-       where: {
-         isAvailable: true,
-       },
+        include: {
+          category: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
 
+  if (!providerWithMenu || !providerWithMenu.isOpen) {
+    throw new Error("Provider not found");
+  }
 
-       include: {
-         category: {
-           select: {
-             name: true,
-           },
-         },
-       },
-     },
-   },
- });
-
-
- if (!providerWithMenu) {
-   throw new Error("Provider not found");
- }
-
-
- return {
-   providerId: providerWithMenu.id,
-   restaurantName: providerWithMenu.restaurantName,
-   description: providerWithMenu.description,
-   image: providerWithMenu.imageUrl,
-   isOpen: providerWithMenu.isOpen,
-   createdAt: providerWithMenu.createdAt,
-   restauranOwner: providerWithMenu.user.name,
-   menu: providerWithMenu.meals.map((meal) => ({
-     mealId: meal.id,
-     name: meal.name,
-     description: meal.description,
-     price: meal.price,
-     image: meal.imageUrl,
-     category: meal.category.name,
-   })),
- };
+  return {
+    providerId: providerWithMenu.id,
+    restaurantName: providerWithMenu.restaurantName,
+    description: providerWithMenu.description,
+    image: providerWithMenu.imageUrl,
+    isOpen: providerWithMenu.isOpen,
+    createdAt: providerWithMenu.createdAt,
+    restaurantOwner: providerWithMenu.user.name,
+    menu: providerWithMenu.meals.map((meal) => ({
+      mealId: meal.id,
+      name: meal.name,
+      description: meal.description,
+      price: meal.price,
+      image: meal.imageUrl,
+      category: meal.category.name,
+    })),
+  };
 };
-
 
 export const providerService = {
   getAllProviders,

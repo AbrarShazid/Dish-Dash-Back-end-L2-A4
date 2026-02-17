@@ -138,9 +138,10 @@ model OrderItem {
   id       String  @id @default(uuid())
   orderId  String
   mealId   String
-   mealName String
+  mealName String
   quantity Int
   price    Decimal @db.Decimal(10, 2)
+  review   Review?
 
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
   meal  Meal  @relation(fields: [mealId], references: [id])
@@ -153,15 +154,15 @@ model Review {
   rating  Int
   comment String?
 
-  userId String
-  mealId String
+  userId      String
+  mealId      String
+  orderItemId String @unique
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  meal Meal @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meal      Meal      @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  orderItem OrderItem @relation(fields: [orderItemId], references: [id])
 
   createdAt DateTime @default(now())
-
-  @@unique([userId, mealId])
 }
 
 enum Role {

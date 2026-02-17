@@ -7,6 +7,7 @@ import { menuRouter } from "./modules/menu/menu.router";
 import { categoryRouter } from "./modules/category/category.router";
 import { orderRouter } from "./modules/order/order.router";
 import { providerRoute } from "./modules/provider/provider.router";
+import { reviewRouter } from "./modules/review/review.router";
 
 const app: Application = express();
 
@@ -37,6 +38,10 @@ app.use("/menu", menuRouter);
 
 // order related task
 app.use("/order", orderRouter);
+
+//review
+
+app.use("/review",reviewRouter)
 
 app.get("/", (req, res) => {
   res.send("Hello  World");

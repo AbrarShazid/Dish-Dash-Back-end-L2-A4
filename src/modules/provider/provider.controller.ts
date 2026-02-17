@@ -16,33 +16,25 @@ const getAllProviders = async (req: Request, res: Response) => {
   }
 };
 
-
-
-
-
-
 const getMenuByProvider = async (req: Request, res: Response) => {
- try {
-   const { providerId } = req.params;
+  try {
+    const { providerId } = req.params;
 
+    const result = await providerService.getMenuByProvider(
+      providerId as string,
+    );
 
-   const result = await providerService.getMenuByProvider(
-     providerId as string,
-   );
-
-
-   res.status(200).json({
-     success: true,
-     data: result,
-   });
- } catch (error: any) {
-   res.status(400).json({
-     success: false,
-     message: error.message || "Failed",
-   });
- }
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed",
+    });
+  }
 };
-
 
 export const providerController = {
   getAllProviders,
