@@ -1,0 +1,19 @@
+model Meal {
+    id          String  @id @default(uuid())
+    name        String
+    description String?
+    price       Decimal @db.Decimal(10, 2)
+    imageUrl    String?
+    isAvailable Boolean @default(true)
+
+    providerId String
+    categoryId String
+
+    provider ProviderProfile @relation(fields: [providerId], references: [id], onDelete: Cascade)
+    category Category        @relation(fields: [categoryId], references: [id])
+
+    orderItems OrderItem[]
+    reviews    Review[]
+
+    createdAt DateTime @default(now())
+}
