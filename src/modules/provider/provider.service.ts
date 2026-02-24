@@ -9,6 +9,13 @@ const getAllProviders = async () => {
           name: true,
         },
       },
+      _count: {
+        select: {
+          orders: true,
+          meals: true,
+          
+        },
+      },
     },
   });
 
@@ -20,6 +27,9 @@ const getAllProviders = async () => {
     isOpen: singleProvider.isOpen,
     createdAt: singleProvider.createdAt,
     restauranOwner: singleProvider.user.name,
+    totalOrderServed: singleProvider._count.orders,
+    totalItem: singleProvider._count.meals,
+   
   }));
 };
 
@@ -62,12 +72,13 @@ const getMenuByProvider = async (providerId: string) => {
     createdAt: providerWithMenu.createdAt,
     restaurantOwner: providerWithMenu.user.name,
     menu: providerWithMenu.meals.map((meal) => ({
-      mealId: meal.id,
+      id: meal.id,
       name: meal.name,
+      restaurantName: providerWithMenu.restaurantName,
       description: meal.description,
       price: meal.price,
       image: meal.imageUrl,
-      category: meal.category.name,
+      categoryName: meal.category.name,
     })),
   };
 };

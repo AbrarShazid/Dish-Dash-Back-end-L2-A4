@@ -257,6 +257,7 @@ const getOrderById = async (
     include: {
       items: {
         select: {
+          mealId:true,
           mealName: true,
           quantity: true,
           price: true,

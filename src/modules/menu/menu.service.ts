@@ -106,7 +106,7 @@ const getAllMenuItems = async (query: any) => {
   const { page, limit, skip, sortBy, sortOrder } =
     paginationSortingHelper(query);
 
-  const { search, categoryId, minPrice, maxPrice } = query;
+  const { search, categoryId, minPrice = 0, maxPrice = 100000 } = query;
 
   const andConditions: any[] = [];
 
@@ -166,6 +166,11 @@ const getAllMenuItems = async (query: any) => {
           name: true,
         },
       },
+      provider: {
+        select: {
+          restaurantName: true,
+        },
+      },
     },
     skip,
     take: limit,
@@ -186,8 +191,10 @@ const getAllMenuItems = async (query: any) => {
     },
     data: meals.map((meal) => ({
       ...meal,
+      restaurantName: meal.provider.restaurantName,
       categoryName: meal.category.name,
       category: undefined,
+      provider: undefined,
     })),
   };
 };
@@ -206,6 +213,24 @@ const getMenuItemById = async (id: string) => {
           restaurantName: true,
         },
       },
+      reviews: {
+        select: {
+          rating: true,
+          comment: true,
+          createdAt: true,
+          user: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
+      },
+      _count: {
+        select: {
+          orderItems: true, //count how many time ordered
+        },
+      },
     },
   });
 
@@ -222,6 +247,15 @@ const getMenuItemById = async (id: string) => {
     isAvailable: meal.isAvailable,
     categoryName: meal.category.name,
     providerName: meal.provider.restaurantName,
+
+    reviews: meal.reviews.map((review) => ({
+      rating: review.rating,
+      comment: review.comment,
+      createdAt: review.createdAt,
+      userName: review.user.name,
+      userImage: review.user.image,
+    })),
+    totalOrders: meal._count.orderItems,
   };
 };
 

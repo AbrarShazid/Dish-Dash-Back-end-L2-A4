@@ -26,12 +26,18 @@ const getProfile = async (userId: string) => {
 
 //update user profile
 const updateUserProfile = async (userId: string, payload: UserPayload) => {
+  
+  const updateData: UserPayload = {
+    name: payload.name,
+  };
+
+  if (payload.image !== undefined  && payload.image!=="") {
+    updateData.image = payload.image;
+  }
+
   const result = await prisma.user.update({
     where: { id: userId },
-    data: {
-      name: payload.name,
-      image: payload.image ?? null,
-    },
+    data: updateData,
   });
 
   return result;
@@ -43,7 +49,6 @@ const updateUserStatus = async (id: string, status: UserStatus) => {
     where: { id },
     data: { status },
   });
-
 
   // If user is provider AND banned ,close restaurant
   if (result.role === Role.PROVIDER && status === UserStatus.SUSPEND) {
@@ -142,5 +147,5 @@ export const userService = {
   updateUserStatus,
   becomeProvider,
   updateProviderProfile,
-  toggleOpen
+  toggleOpen,
 };

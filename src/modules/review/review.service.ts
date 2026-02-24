@@ -10,7 +10,7 @@ const createReview = async (
     throw new Error("Rating must be between 1 and 5");
   }
 
-  // 2️⃣ Check if user ordered this meal before
+  //  Check if user ordered this meal before
   const orderItem = await prisma.orderItem.findFirst({
     where: {
       mealId,
