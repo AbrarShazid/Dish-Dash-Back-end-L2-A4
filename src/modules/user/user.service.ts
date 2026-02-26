@@ -3,6 +3,7 @@ import { prisma } from "../../lib/prisma";
 
 interface BecomeProviderPayload {
   restaurantName: string;
+  image?: string;
   description?: string;
 }
 interface UserPayload {
@@ -26,12 +27,11 @@ const getProfile = async (userId: string) => {
 
 //update user profile
 const updateUserProfile = async (userId: string, payload: UserPayload) => {
-  
   const updateData: UserPayload = {
     name: payload.name,
   };
 
-  if (payload.image !== undefined  && payload.image!=="") {
+  if (payload.image !== undefined && payload.image !== "") {
     updateData.image = payload.image;
   }
 
@@ -77,13 +77,8 @@ const updateUserStatus = async (id: string, status: UserStatus) => {
 const becomeProvider = async (
   userId: string,
   payload: BecomeProviderPayload,
-  // file: Express.Multer.File
 ) => {
   return await prisma.$transaction(async (tx) => {
-    // const uploadResult: any = await uploadToCloudinary(file.buffer);
-
-    // const imageUrl = uploadResult.secure_url;
-
     await tx.user.update({
       where: { id: userId },
       data: { role: "PROVIDER" },
@@ -94,7 +89,7 @@ const becomeProvider = async (
         userId,
         restaurantName: payload.restaurantName,
         description: payload.description ?? null,
-        // imageUrl,
+        imageUrl:payload.image??null
       },
     });
 
