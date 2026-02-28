@@ -26,22 +26,4 @@ router.patch(
   userController.updateUserStatus,
 );
 
-router.patch(
-  "/become-provider",
-  authMiddleware(UserRole.CUSTOMER),
-  userController.becomeProvider,
-);
-
-router.patch(
-  "/update-provider-profile",
-  authMiddleware(UserRole.PROVIDER),
-  userController.updateProviderProfile,
-);
-
-router.patch(
-  "/toggle-open",
-  authMiddleware(UserRole.PROVIDER),
-  userController.toggleOpen,
-);
-
 export const userRouter: Router = router;

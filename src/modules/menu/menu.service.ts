@@ -246,6 +246,7 @@ const getMenuItemById = async (id: string) => {
     imageUrl: meal.imageUrl,
     isAvailable: meal.isAvailable,
     categoryName: meal.category.name,
+    providerId:meal.providerId,
     providerName: meal.provider.restaurantName,
 
     reviews: meal.reviews.map((review) => ({

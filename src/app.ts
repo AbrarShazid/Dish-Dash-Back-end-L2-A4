@@ -8,6 +8,7 @@ import { categoryRouter } from "./modules/category/category.router";
 import { orderRouter } from "./modules/order/order.router";
 import { providerRoute } from "./modules/provider/provider.router";
 import { reviewRouter } from "./modules/review/review.router";
+import { analyticsRouter } from "./modules/analytics/analytics.router";
 
 const app: Application = express();
 
@@ -42,6 +43,9 @@ app.use("/order", orderRouter);
 //review
 
 app.use("/review",reviewRouter)
+
+//analytics 
+app.use("/analytics",analyticsRouter)
 
 app.get("/", (req, res) => {
   res.send("Hello  World");
