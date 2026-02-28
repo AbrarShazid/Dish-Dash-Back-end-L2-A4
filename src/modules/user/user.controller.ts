@@ -56,8 +56,20 @@ const updateUserProfile = async (req: Request, res: Response) => {
 const updateUserStatus = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { status } = req.body;
-
+  if (!req.user) {
+    return res.status(400).json({
+      success: false,
+      message: "Only Admin!",
+    });
+  }
   try {
+    if (id === req.user.id) {
+      return res.status(401).json({
+        success: false,
+        message: "Admin Status cann't be change!",
+      });
+    }
+
     const result = await userService.updateUserStatus(id as string, status);
 
     res.status(200).json({

@@ -6,7 +6,11 @@ interface UserPayload {
   image?: string;
 }
 const getAllUser = async () => {
-  const result = await prisma.user.findMany();
+  const result = await prisma.user.findMany({
+  orderBy: {
+    createdAt: 'desc', 
+  },
+});
   return result;
 };
 

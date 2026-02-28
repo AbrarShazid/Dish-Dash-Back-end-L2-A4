@@ -44,19 +44,19 @@ const getAllCategory = async (req: Request, res: Response) => {
 
 const deleteCategory = async (req: Request, res: Response) => {
   try {
-    const { id } = req.query;
+    const { categoryId } = req.params;
 
-    const result = await categoryService.deleteCategory(id as string);
-    res.status(200).json({
+    const result = await categoryService.deleteCategory(categoryId as string);
+
+    return res.status(200).json({
       success: true,
       data: result,
       message: "Category deleted successfully",
     });
-  } catch (error) {
-    res.status(500).json({
+  } catch (error: any) {
+    return res.status(409).json({
       success: false,
-
-      message: "Failed to delete category",
+      message: error.message || "Failed to delete category",
     });
   }
 };

@@ -13,6 +13,13 @@ const getAllCategory = async () => {
   return res;
 };
 const deleteCategory = async (id: string) => {
+  const mealsCount = await prisma.meal.count({
+    where: { categoryId: id },
+  });
+
+  if (mealsCount > 0) {
+    throw new Error("Category is in use and cannot be deleted.");
+  }
   const res = await prisma.category.delete({
     where: { id },
   });

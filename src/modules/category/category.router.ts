@@ -14,7 +14,7 @@ router.post(
 );
 
 router.delete(
-  "/delete-category",
+  "/:categoryId",
   authMiddleware(UserRole.ADMIN),
   categoryController.deleteCategory,
 );
