@@ -5,6 +5,7 @@ model Meal {
     price       Decimal @db.Decimal(10, 2)
     imageUrl    String?
     isAvailable Boolean @default(true)
+    isDeleted   Boolean @default(false)
 
     providerId String
     categoryId String
