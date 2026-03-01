@@ -5,6 +5,10 @@ import authMiddleware, { UserRole } from "../../middlewares/authMiddleware";
 const router = Router();
 
 router.get("/", menuController.getAllMenuItems);
+
+router.get("/provider",authMiddleware(UserRole.PROVIDER), menuController.getMenuByProvider);
+
+
 router.get("/:id", menuController.getMenuItemById);
 
 router.post(

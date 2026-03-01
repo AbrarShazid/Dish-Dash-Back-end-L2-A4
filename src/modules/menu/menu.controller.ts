@@ -22,84 +22,98 @@ const addMenuItem = async (req: Request, res: Response) => {
 };
 
 const updateMenuItem = async (req: Request, res: Response) => {
- try {
-   if (!req.params.id) {
-     return res.status(400).json({
-       success: false,
-       message: "Meal ID is required",
-     });
-   }
+  try {
+    if (!req.params.id) {
+      return res.status(400).json({
+        success: false,
+        message: "Meal ID is required",
+      });
+    }
 
+    const result = await menuService.updateMenuItem(
+      req.user?.id as string,
+      req.params.id as string,
+      req.body,
+    );
 
-   const result = await menuService.updateMenuItem(
-     req.user?.id as string,
-     req.params.id as string,
-     req.body,
-   );
-
-
-   res.status(200).json({
-     success: true,
-     data: result,
-     message: "Menu item updated successfully",
-   });
- } catch (error: any) {
-   res.status(400).json({
-     success: false,
-     message: error.message || "Failed to update menu item",
-   });
- }
+    res.status(200).json({
+      success: true,
+      data: result,
+      message: "Menu item updated successfully",
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to update menu item",
+    });
+  }
 };
 
 const getAllMenuItems = async (req: Request, res: Response) => {
- try {
-   const result = await menuService.getAllMenuItems(req.query);
+  try {
+    const result = await menuService.getAllMenuItems(req.query);
 
-
-   res.status(200).json({
-     success: true,
-     meta: result.meta,
-     data: result.data,
-     message: "Menu items retrieved successfully",
-   });
- } catch (error: any) {
-   res.status(400).json({
-     success: false,
-     message: error.message || "Failed to retrieve menu items",
-   });
- }
+    res.status(200).json({
+      success: true,
+      meta: result.meta,
+      data: result.data,
+      message: "Menu items retrieved successfully",
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to retrieve menu items",
+    });
+  }
 };
+
+const getMenuByProvider = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user!.id;
+    const result = await menuService.getMenuByProvider(userId);
+
+    res.status(200).json({
+      success: true,
+
+      data: result,
+      message: "Menu items retrieved successfully",
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to retrieve menu items",
+    });
+  }
+};
+
 const getMenuItemById = async (req: Request, res: Response) => {
- try {
-   if (!req.params.id) {
-     return res.status(400).json({
-       success: false,
-       message: "Meal ID is required",
-     });
-   }
+  try {
+    if (!req.params.id) {
+      return res.status(400).json({
+        success: false,
+        message: "Meal ID is required",
+      });
+    }
 
+    const result = await menuService.getMenuItemById(req.params.id as string);
 
-   const result = await menuService.getMenuItemById(req.params.id as string);
-
-
-   res.status(200).json({
-     success: true,
-     data: result,
-     message: "Menu item retrieved successfully",
-   });
- } catch (error: any) {
-   res.status(400).json({
-     success: false,
-     message: error.message || "Failed to retrieve menu item",
-   });
- }
+    res.status(200).json({
+      success: true,
+      data: result,
+      message: "Menu item retrieved successfully",
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to retrieve menu item",
+    });
+  }
 };
-
-
 
 export const menuController = {
   addMenuItem,
   updateMenuItem,
   getAllMenuItems,
   getMenuItemById,
+  getMenuByProvider,
 };

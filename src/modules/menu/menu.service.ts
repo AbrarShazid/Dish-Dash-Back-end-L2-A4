@@ -199,6 +199,65 @@ const getAllMenuItems = async (query: any) => {
   };
 };
 
+const getMenuByProvider = async (userId: string) => {
+  const provider = await prisma.providerProfile.findUnique({
+    where: {
+      userId: userId,
+    },
+  });
+
+  if (!provider) {
+    throw new Error("Provider not found");
+  }
+  const providerId = provider.id;
+
+  const providerWithMenu = await prisma.providerProfile.findUnique({
+    where: { id: providerId },
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+
+      meals: {
+        where: {
+          providerId: providerId,
+          isAvailable: true,
+        },
+
+        include: {
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!providerWithMenu) {
+    throw new Error("Provider not found");
+  }
+
+  return {
+    menu: providerWithMenu.meals.map((meal) => ({
+      id: meal.id,
+      name: meal.name,
+      description: meal.description,
+      price: Number(meal.price),
+      categoryId: meal.category.id,
+      categoryName: meal.category.name,
+      imageUrl: meal.imageUrl,
+      isAvailable: meal.isAvailable,
+      isDeleted: meal.isDeleted,
+      createdAt: meal.createdAt,
+    })),
+  };
+};
+
 const getMenuItemById = async (id: string) => {
   const meal = await prisma.meal.findUnique({
     where: { id },
@@ -246,7 +305,7 @@ const getMenuItemById = async (id: string) => {
     imageUrl: meal.imageUrl,
     isAvailable: meal.isAvailable,
     categoryName: meal.category.name,
-    providerId:meal.providerId,
+    providerId: meal.providerId,
     providerName: meal.provider.restaurantName,
 
     reviews: meal.reviews.map((review) => ({
@@ -265,4 +324,5 @@ export const menuService = {
   updateMenuItem,
   getAllMenuItems,
   getMenuItemById,
+  getMenuByProvider,
 };
