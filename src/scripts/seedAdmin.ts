@@ -1,9 +1,8 @@
 import { prisma } from "../lib/prisma";
 import { UserRole } from "../middlewares/authMiddleware";
 
-
-const APP_URL=process.env.APP_URL
-const BACKEND_URL=process.env.BACKEND_URL
+const APP_URL = process.env.APP_URL;
+const BACKEND_URL = process.env.BACKEND_URL;
 
 async function seedAdmin() {
   try {
@@ -23,21 +22,18 @@ async function seedAdmin() {
     });
 
     if (existinguser) {
-      throw new Error("User already exists!");
+      console.log("Admin already exists");
+      return;
     }
-
-    const signUpAdmin = await fetch(
-      `${BACKEND_URL}/api/auth/sign-up/email`,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          // origin: "http://localhost:3000",
-          origin: `${APP_URL}`,
-        },
-        body: JSON.stringify(adminData),
+    const signUpAdmin = await fetch(`${BACKEND_URL}/api/auth/sign-up/email`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        // origin: "http://localhost:3000",
+        origin: `${APP_URL}`,
       },
-    );
+      body: JSON.stringify(adminData),
+    });
 
     if (signUpAdmin.ok) {
       const updateVerified = await prisma.user.update({

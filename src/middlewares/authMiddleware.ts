@@ -64,8 +64,7 @@ const authMiddleware = (...roles: UserRole[]) => {
         emailVerified: session.user.emailVerified,
         status: session.user.status,
       };
-      
-      
+
       const userRole = req.user.role as UserRole;
 
       if (roles.length === 0 || roles.includes(userRole)) {
